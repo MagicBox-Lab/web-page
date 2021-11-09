@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MagicBox</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="img/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="style.css?v=2">
+  <script src="js/web3.min.js"></script>
+  <script src="js/bignumber.js"></script>
+  <script src="js/js.js?v=1"></script>
+</head>
+<body>
+
+<div class="home-outer">
+  <div class="home-box wrapper">
+    <div class="head-img">
+      <a href="https://magicbox.game"><img src="img/icon_1.png"/></a>
+    </div>
+    <h5 class="home-title">(Please make sure you are visiting https://magicbox.game)</h5>
+    <div class="home-input" onclick="onConnect()">
+      <img src="img/icon_2.png"/>
+      <p id="address">CONNECT WALLET</p>
+    </div>
+
+    <div class="home-content">
+      <div class="content-left">
+        <h3>Your Wallet</h3>
+        <div class="content-wallet">
+          <div>
+            <div>
+              <img src="img/icon_5.png"/>
+              <span id="balanceMbtA">0</span>
+            </div>
+            <p id="balanceMbtB">$0</p>
+          </div>
+          <div>
+            <div>
+              <img src="img/icon_3.png"/>
+              <span id="balanceBusdA">0</span>
+            </div>
+            <p id="balanceBusdB">$0</p>
+          </div>
+        </div>
+      </div>
+      <div style="width: 14px;height: 10px"></div>
+
+      <div class="content-right">
+        <h3>Total Earned</h3>
+        <div>
+          <img src="img/icon_3.png"/>
+          <span id="totalEarnedA">0</span>
+        </div>
+        <p id="totalEarnedB">$0</p>
+      </div>
+    </div>
+
+    <div class="home-claimed">
+      <div class="claimed-left">
+        <h3  style="padding-bottom:10px">Reward Not Claimed</h3>
+        <div>
+          <img src="img/icon_3.png"/>
+          <span id="unpaidEarningsA">0</span>
+        </div>
+        <p id="unpaidEarningsB">$0</p>
+
+        <div class="claimed-btn" onclick="claimReward()">Claim</div>
+      </div>
+
+      <div class="claimed-right">
+        <p>Rewards are automatically sent every 60 minutes. It can, however, take longer depending on your holdings and trading volume. Rewards will be triggered once they are big enough to cover the
+          gas fees. If you are a smaller holder it may take from a couple hours to a few days for rewards to appear in your wallet. You can also manually claim unclaimed rewards, but you will need to
+          pay the gas fees.</p>
+      </div>
+    </div>
+
+    <div class="home-foot" style="margin-bottom:70px;">
+      <h3>Reward Distributed To Holders</h3>
+      <div class="foot-box">
+        <div class="foot-left">
+          <div>
+            <img src="img/icon_3.png"/>
+            <span id="totalRewardsA">0</span>
+          </div>
+          <p id="totalRewardsB">$0</p>
+        </div>
+
+        <div class="foot-right">
+          <p>MBT Contract: </p>
+          <div style="margin-top:5px;">
+            <span id="MBTContrac">0x4ce2DB133035519F538b7849201D6D541972164c</span>
+            
+          </div>
+          <p>BUSD Contract: </p>
+          <div style="margin-top:5px;">
+            <span id="BUSDContract">0xe9e7cea3dedca5984780bafc599bd69add087d56</span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
