@@ -9,7 +9,109 @@ let contract_addr = '0x29D56E3889935490CB7F1AAc75063b4B6Ad7Ee5B';
 let contract_abi = [{"inputs":[{"internalType":"address","name":"holder","type":"address"}],"name":"getUnpaidEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalRewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"stocks","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"totalExcluded","type":"uint256"},{"internalType":"uint256","name":"totalRealised","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"claimReward","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
 let balance_abi = [{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
 let pair_abi = [{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token0","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token1","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}];
-
+let airdrop_addr="0x442CF9Ae348686D4E773815c9163652739978D01";
+let airdrop_abi=[
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "Claim",
+		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "claim",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "addr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "mbt",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "_mbt",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "_owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "received",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
 async function onConnect() {
    try{
       if (window.ethereum) {
@@ -44,7 +146,6 @@ async function onConnect() {
          setTimeout(() => {
             document.getElementById("address").innerHTML = wallet_address;
          }, 1000);
-         
          getBalance();
          getBusdBalance();
          getStocks();
@@ -52,9 +153,7 @@ async function onConnect() {
          getTotalRewards();
       }
    }catch(e){
-      if(e && e.code && e.code==-32000){
-         return;
-      }
+
    }
 }
 
@@ -64,6 +163,11 @@ async function getBalance() {
    let balanceMbt = mathDiv(res, mathPow(10, 9));
    document.getElementById("balanceMbtA").innerHTML = mathFixed(balanceMbt, 3);
    mbtPrice(balanceMbt);
+   if(balanceMbt.isLessThanOrEqualTo(0)){
+      document.getElementById("claimbtn").style.display="inline";
+   }else{
+      document.getElementById("claimbtn").style.display="none";
+   }
 }
 
 async function getBusdBalance() {
@@ -153,6 +257,12 @@ async function claimReward() {
    if(!wallet_address) alert('Please, Connect your wallet!');
    let contract = new web.eth.Contract(contract_abi,contract_addr);
    contract.methods.claimReward().send({from: wallet_address});
+}
+
+async function claimAirdop(){
+   if(!wallet_address) alert('Please, Connect your wallet!');
+   let contract = new web.eth.Contract(airdrop_abi,airdrop_addr);
+   contract.methods.claim().send({from: wallet_address});
 }
 
 function copyText(str_file) {
