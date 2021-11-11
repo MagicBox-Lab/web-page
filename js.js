@@ -84,6 +84,6 @@ async function mbtPrice(b) {
    mbt_bnb_price = mbt_usd_price.dividedBy(2);
    let coins = BigNumber(1000000000000000).minus(b);
    document.getElementById("total_cap").innerText=mbt_bnb_price.multipliedBy(coins).toFixed(0)+"";
-   let lqt = mbt_value.multipliedBy(mbt_bnb_price).multipliedBy(2);
+   let lqt = mbt_value.multipliedBy(mbt_bnb_price).multipliedBy(4);
    document.getElementById("total_lqt").innerText=lqt.toFixed(0)+"";
 }
