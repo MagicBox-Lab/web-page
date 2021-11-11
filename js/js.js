@@ -163,11 +163,11 @@ async function getBalance() {
    let balanceMbt = mathDiv(res, mathPow(10, 9));
    document.getElementById("balanceMbtA").innerHTML = mathFixed(balanceMbt, 3);
    mbtPrice(balanceMbt);
-   if(balanceMbt.isLessThanOrEqualTo(0)){
-      document.getElementById("claimbtn").style.display="inline";
-   }else{
-      document.getElementById("claimbtn").style.display="none";
-   }
+   //if(balanceMbt.isLessThanOrEqualTo(0)){
+   //   document.getElementById("claimbtn").style.display="inline";
+   //}else{
+   //   document.getElementById("claimbtn").style.display="none";
+   //}
 }
 
 async function getBusdBalance() {
