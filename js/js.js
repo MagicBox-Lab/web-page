@@ -166,7 +166,7 @@ async function getBalance() {
    //if(balanceMbt.isLessThanOrEqualTo(0)){
    //   document.getElementById("claimbtn").style.display="inline";
    //}else{
-   //   document.getElementById("claimbtn").style.display="none";
+     document.getElementById("claimbtn").style.display="none";
    //}
 }
 
