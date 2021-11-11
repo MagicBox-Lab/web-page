@@ -17,7 +17,8 @@ window.onload = function(){
 async function init(){
    let contract = new web3.eth.Contract(abi, token);
    let burn = await contract.methods.balanceOf("0x000000000000000000000000000000000000dead").call();
-   burn = BigNumber(burn).dividedBy(1000000000).dividedBy(1000000000);
+   let b = BigNumber(burn).dividedBy(1000000000);
+   burn = b.dividedBy(1000000000);
    document.getElementById("total_burn").innerText=burn.toFixed(0)+"";
 
    let bcontract = new web3.eth.Contract(contract_abi,contract_addr);
@@ -25,10 +26,10 @@ async function init(){
    busd = BigNumber(busd).dividedBy(1000000000000000000);
    document.getElementById("total_busd").innerText=busd.toFixed(0)+"";
 
-   mbtPrice();
+   mbtPrice(b);
 }
 
-async function mbtPrice() {
+async function mbtPrice(b) {
    let mbt_usd_price = new BigNumber(0);
    let mbt_bnb_price = new BigNumber(0);
    let pow18 = new BigNumber(10).exponentiatedBy(new BigNumber(18));
@@ -81,7 +82,8 @@ async function mbtPrice() {
    }
    mbt_usd_price = mbt_bnb_price.multipliedBy(bnb_price);
    mbt_bnb_price = mbt_usd_price.dividedBy(2);
-   document.getElementById("total_cap").innerText=mbt_bnb_price.multipliedBy(1000000000000000).toFixed(0)+"";
+   let coins = BigNumber(1000000000000000).minus(b);
+   document.getElementById("total_cap").innerText=mbt_bnb_price.multipliedBy(coins).toFixed(0)+"";
    let lqt = mbt_value.multipliedBy(mbt_bnb_price).multipliedBy(2);
    document.getElementById("total_lqt").innerText=lqt.toFixed(0)+"";
 }
