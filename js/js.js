@@ -1,5 +1,7 @@
 let web = '';
+let webWiter='';
 let wallet_address = '';
+let show_addr;
 let token_address = "0x4ce2DB133035519F538b7849201D6D541972164c";
 let usdt_address = "0x55d398326f99059ff775485246999027b3197955";
 let busd_address = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
@@ -113,6 +115,8 @@ let airdrop_abi=[
 	}
 ];
 async function onConnect() {
+   web = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org'));
+   document.getElementById("claimbtn").style.display="none";
    try{
       if (window.ethereum) {
          window.ethereum.on('accountsChanged', function (accounts) {
@@ -140,26 +144,33 @@ async function onConnect() {
             return;
          }
          let accounts = await window.ethereum.request({method:'eth_requestAccounts'});
-         web = new Web3(window.ethereum);
+         webWiter = new Web3(window.ethereum);
          wallet_address = accounts[0]; 
-         
+         show_addr = wallet_address;
          setTimeout(() => {
-            document.getElementById("address").innerHTML = wallet_address;
+            document.getElementById("address").value = show_addr;
+            document.getElementById("claim_btn").style="inline";
+            changeAddr();
          }, 1000);
-         getBalance();
-         getBusdBalance();
-         getStocks();
-         getUnpaidEarnings();
-         getTotalRewards();
+         
       }
    }catch(e){
 
    }
 }
 
+function changeAddr(){
+   show_addr = document.getElementById("address").value;
+   getBalance();
+   getBusdBalance();
+   getStocks();
+   getUnpaidEarnings();
+   getTotalRewards();
+}
+
 async function getBalance() {
    let contract = new web.eth.Contract(balance_abi, token_address);
-   let res = await contract.methods.balanceOf(wallet_address).call({from: wallet_address});
+   let res = await contract.methods.balanceOf(show_addr).call();
    let balanceMbt = mathDiv(res, mathPow(10, 9));
    document.getElementById("balanceMbtA").innerHTML = mathFixed(balanceMbt, 3);
    mbtPrice(balanceMbt);
@@ -172,7 +183,7 @@ async function getBalance() {
 
 async function getBusdBalance() {
    let contract = new web.eth.Contract(balance_abi, busd_address);
-   let res = await contract.methods.balanceOf(wallet_address).call({from: wallet_address});
+   let res = await contract.methods.balanceOf(show_addr).call();
    document.getElementById("balanceBusdA").innerHTML = mathFixed(mathDiv(res, mathPow(10, 18)), 3);
    document.getElementById("balanceBusdB").innerHTML = mathFixed(mathDiv(res, mathPow(10, 18)), 3);
 }
@@ -234,20 +245,20 @@ async function mbtPrice(balanceMbt) {
 
 async function getStocks() {
    let contract = new web.eth.Contract(contract_abi,contract_addr);
-   let res = await contract.methods.stocks(wallet_address).call({from: wallet_address});
+   let res = await contract.methods.stocks(show_addr).call();
    document.getElementById("totalEarnedA").innerHTML = mathFixed(mathDiv(res[2], this.mathPow(10, 18)),3);
    document.getElementById("totalEarnedB").innerHTML = '$' + mathFixed(mathDiv(res[2], this.mathPow(10, 18)),3);
 }
 
 async function getUnpaidEarnings() {
    let contract = new web.eth.Contract(contract_abi,contract_addr);
-   let res = await contract.methods.getUnpaidEarnings(wallet_address).call({from: wallet_address});
+   let res = await contract.methods.getUnpaidEarnings(show_addr).call();
    document.getElementById("unpaidEarningsA").innerHTML = mathFixed(mathDiv(res, this.mathPow(10, 18)),3);
    document.getElementById("unpaidEarningsB").innerHTML = '$' + mathFixed(mathDiv(res, this.mathPow(10, 18)),3);
 }
 async function getTotalRewards() {
    let contract = new web.eth.Contract(contract_abi,contract_addr);
-   let res = await contract.methods.totalRewards().call({from: wallet_address});
+   let res = await contract.methods.totalRewards().call();
    document.getElementById("totalRewardsA").innerHTML = mathFixed(mathDiv(res, this.mathPow(10, 18)),3);
    document.getElementById("totalRewardsB").innerHTML = '$' + mathFixed(mathDiv(res, this.mathPow(10, 18)),3);
 }
@@ -255,13 +266,13 @@ async function getTotalRewards() {
 async function claimReward() {
    let unpaidEarnings = document.getElementById("unpaidEarningsA").innerHTML;
    if(!wallet_address) alert('Please, Connect your wallet!');
-   let contract = new web.eth.Contract(contract_abi,contract_addr);
+   let contract = new webWiter.eth.Contract(contract_abi,contract_addr);
    contract.methods.claimReward().send({from: wallet_address});
 }
 
 async function claimAirdop(){
    if(!wallet_address) alert('Please, Connect your wallet!');
-   let contract = new web.eth.Contract(airdrop_abi,airdrop_addr);
+   let contract = new webWiter.eth.Contract(airdrop_abi,airdrop_addr);
    contract.methods.claim().send({from: wallet_address});
 }
 

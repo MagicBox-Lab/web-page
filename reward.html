@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="style.css?v=2">
   <script src="js/web3.min.js"></script>
   <script src="js/bignumber.js"></script>
-  <script src="js/js.js?v=21"></script>
+  <script src="js/js.js?v=21211"></script>
 </head>
 <body>
 
@@ -19,8 +19,7 @@
     </div>
     <h5 class="home-title">(Please make sure you are visiting https://magicbox.game)</h5>
     <div class="home-input" onclick="onConnect()">
-      <img src="img/icon_2.png"/>
-      <p id="address">CONNECT WALLET</p>
+      <input id="address" placeholder="Input bsc address" oninput="changeAddr()" style="width:70%;height:45px;padding:10px;font-size:18px" />
     </div>
 
     <div class="home-content">
@@ -64,7 +63,7 @@
         </div>
         <p id="unpaidEarningsB" >$0</p>
 
-        <div class="claimed-btn" onclick="claimReward()" style="height:40px">Claim</div>
+        <div class="claimed-btn" id="claim_btn" onclick="claimReward()" style="height:40px">Claim</div>
       </div>
 
       <div class="claimed-right">
